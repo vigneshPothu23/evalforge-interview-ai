@@ -1,0 +1,2 @@
+[console_scripts]
+server = evalforge.server.app:main
