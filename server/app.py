@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 from openenv.core.env_server.http_server import create_app
 from models import EvalforgeAction, EvalforgeObservation
@@ -16,7 +16,7 @@ base_app = create_app(
 # Main FastAPI app
 app = FastAPI()
 
-# ✅ IMPORTANT: mount API at /api (NOT /)
+# ✅ Mount API at /api (for your usage)
 app.mount("/api", base_app)
 
 
@@ -40,7 +40,31 @@ def health():
 
 
 # =========================
-# Run server
+# 🔥 REQUIRED FOR EVALUATOR
+# =========================
+
+@app.post("/reset")
+async def reset_proxy(request: Request):
+    return await base_app(request.scope, request.receive, request._send)
+
+
+@app.post("/step")
+async def step_proxy(request: Request):
+    return await base_app(request.scope, request.receive, request._send)
+
+
+@app.get("/state")
+async def state_proxy(request: Request):
+    return await base_app(request.scope, request.receive, request._send)
+
+
+@app.get("/schema")
+async def schema_proxy(request: Request):
+    return await base_app(request.scope, request.receive, request._send)
+
+
+# =========================
+# RUN SERVER
 # =========================
 
 def main():
