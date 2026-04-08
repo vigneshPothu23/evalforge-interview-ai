@@ -13,7 +13,6 @@ class EvalforgeEnvironment(Env):
     def __init__(self):
         self._state = State()
 
-    # ✅ REQUIRED
     async def reset(self) -> Dict[str, Any]:
         self._state = State()
         return {
@@ -23,12 +22,11 @@ class EvalforgeEnvironment(Env):
             },
             "reward": 0.0,
             "done": False,
-            "metadata": {"step_count": self._state.step_count},
+            "info": {"step_count": self._state.step_count},
         }
 
-    # ✅ REQUIRED
     async def step(self, action) -> Dict[str, Any]:
-        message = action.message if hasattr(action, "message") else ""
+        message = getattr(action, "message", "")
 
         self._state.step_count += 1
 
@@ -39,10 +37,9 @@ class EvalforgeEnvironment(Env):
             },
             "reward": len(message) * 0.1,
             "done": False,
-            "metadata": {"step_count": self._state.step_count},
+            "info": {"step_count": self._state.step_count},
         }
 
-    # ✅ REQUIRED
     @property
     def state(self) -> Dict[str, Any]:
         return {
