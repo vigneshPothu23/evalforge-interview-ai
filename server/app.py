@@ -1,6 +1,7 @@
 from openenv.core.env_server.http_server import create_app
+
 from models import EvalforgeAction, EvalforgeObservation
-from server.evalforge_environment import EvalforgeEnvironment
+from evalforge_environment import EvalforgeEnvironment  # ✅ FIXED
 
 app = create_app(
     EvalforgeEnvironment,
